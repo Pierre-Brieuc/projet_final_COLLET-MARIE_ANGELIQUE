@@ -7,13 +7,13 @@ const authorizationMiddleware = require("../authorization/authorization.middlewa
 const httpErrorHelper = require("../custom-errors/http-error.helper");
 
 async function controllerCreateOneTodo(req, res) {
+  req.body.user = req.user.username;
   const newTodo = await todosService.createOne(req.body);
   return res.status(201).send(newTodo);
 }
 
 router.post(
   "/",
-  authorizationMiddleware.canAccess(["admin"]),
   controllerCreateOneTodo
 );
 
@@ -48,7 +48,6 @@ async function controllerUpdateOneTodo(req, res, next) {
 
 router.patch(
   "/:id",
-  authorizationMiddleware.canAccess(["admin"]),
   controllerUpdateOneTodo
 );
 
@@ -63,7 +62,6 @@ async function controllerDeleteOneTodo(req, res, next) {
 
 router.delete(
   "/:id",
-  authorizationMiddleware.canAccess(["admin"]),
   controllerDeleteOneTodo
 );
 

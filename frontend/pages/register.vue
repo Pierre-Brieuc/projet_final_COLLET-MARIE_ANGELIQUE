@@ -14,8 +14,6 @@
     async function onRegister(){
         const res = await register(variables.username, variables.password)
         if(res.ok){
-            const {jwt} = await res.json()
-            authToken.value = jwt
             onValidRegister();
         }
         else{

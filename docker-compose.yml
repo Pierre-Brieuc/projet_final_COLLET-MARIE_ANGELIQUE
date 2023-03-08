@@ -1,36 +1,52 @@
 version: "3"
+
 services:
   mongodb:
-    image: mongo
+    image: mongo:latest
+    hostname: mongodb
     container_name: mongodb
-    restart: always
-    ports:
-      - "27017:27017"
+    restart: unless-stopped
+    networks:
+      - net
     volumes:
       - ./data:/data/db
   backend:
-    image: node:latest
+    image: back
     container_name: backend
-    restart: always
+    restart: unless-stopped
+    networks:
+      - net
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
     depends_on:
       - mongodb
-    environment:
-      - MONGODB_URI=mongodb://mongodb:27017/mydatabase
+    #environment:
+    #   - MONGO_URI=mongodb://mongodb:27017/mydatabase
+    #   - PORT=5000
+    #   #This should be randomly generated string that signs your JWT tokens and should be secret and unique, change it and note that changing it will invalidate all existing tokens
+    #   - JWT_SECRET=fcFrFtNPLaLAyia4agE3SHuktDISoIKRCAmGMKX33t0fRnASoN8TvZX4u9vojFvFzKDQoiJfDT8BUR0f      
     volumes:
       - ./backend:/app
-    working_dir: /app
-    command: npm start
     ports:
-      - "3000:3000"
+      - "5000:5000"
   frontend:
-    image: node:latest
+    image: front
     container_name: frontend
-    restart: always
+    restart: unless-stopped
+    networks:
+      - net
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     depends_on:
       - backend
     volumes:
       - ./frontend:/app
-    working_dir: /app
-    command: npm run serve
     ports:
-      - "8080:8080"
+      - "3000:3000"
+
+networks:
+  net:
+    driver: bridge
+

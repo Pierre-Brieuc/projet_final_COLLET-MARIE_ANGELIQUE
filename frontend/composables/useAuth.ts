@@ -1,6 +1,6 @@
 export const useAuth = () => {
     const register = async (username: string, password: string) => {
-        const resp = await fetch('backend:5000/users/register',{
+        const resp = await fetch('http://localhost:5000/users/register',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -16,7 +16,7 @@ export const useAuth = () => {
     }
 
     const login = async (username: string, password: string) => {
-        const resp = await fetch('backend:5000/users/login',{
+        const resp = await fetch('http://localhost:5000/users/login',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

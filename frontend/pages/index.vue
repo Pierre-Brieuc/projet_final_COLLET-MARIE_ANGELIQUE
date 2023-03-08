@@ -6,26 +6,31 @@ definePageMeta({
 })
 
 const variables = reactive({
-    newTodo:''
+    newTitle:'',
+    newDetails:'',
+    newStatus:false
 })
 
 const jwt= useCookie('jwt')
 
-const {data: todos} = await useFetch('backend:3000/todo',{
+const {data: todos} = await useFetch('http://localhost:5000/todo',{
     headers:{
         Authorization:`Bearer ${jwt.value}`
     }
 })
 
 const addTodo = async () => {
-    const resp = await fetch('backend:3000/todo',{
+    const resp = await fetch('http://localhost:5000/todo',{
         method:'POST',
         headers:{
             'Content-Type':'application/json',
             Authorization:`Bearer ${jwt.value}`
         },
         body:JSON.stringify({
-            content: variables.newTodo
+            details: variables.newTodo,
+            title: variables.newDetails,
+            creationDate: new Date(),
+            isDone: variables.newStatus
         })
     })
     if(resp.ok){
@@ -38,7 +43,7 @@ const addTodo = async () => {
 }
 
 const removeTodo = async (id) => {
-    const resp = await fetch(`backend:5000/todo/${id}`,{
+    const resp = await fetch(`http://localhost:5000/todo/${id}`,{
         method:'DELETE',
         headers:{
             'Content-Type':'application/json',
@@ -61,14 +66,17 @@ const removeTodo = async (id) => {
     <div>
         <h1>Welcome! Here is your current todo-list :</h1>
         <div>
-            <input type="text" v-model="variables.newTodo" />
+            <label for="newTitle">Title of new task</label>
+            <input type="text" id="newTitle" v-model="variables.newTodo"  />
+            <label for="newDetails">Details of new task</label>
+            <input type="text" id="newDetails" v-model="variables.newDetails" />
             <button @click="addTodo">Add</button>
         </div>
         <div>
             <ul>
                 <li v-for="todo in todos">
                     <span>{{ todo.title }} : {{ todo.details }}</span>
-                    <button @click="removeTodo(todo.id)">Remove</button>
+                    <button @click="removeTodo(todo._id)">Remove</button>
                 </li>
             </ul>
         </div>
