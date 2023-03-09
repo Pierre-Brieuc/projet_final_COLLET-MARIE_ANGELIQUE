@@ -20,7 +20,7 @@ router.post(
 async function controllerGetAllTodo(req, res) {
   const limit = req.query.limit || 20;
   const offset = req.query.offset || 0;
-  const todos = await todosService.findAll(limit, offset);
+  const todos = await todosService.findAll(req.user.username);
   return res.status(200).send(todos);
 }
 

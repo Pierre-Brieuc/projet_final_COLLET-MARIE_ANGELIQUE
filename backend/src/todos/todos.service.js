@@ -15,8 +15,8 @@ async function createOne(data) {
  * @param offset
  * @returns {Query<Array<HydratedDocument<unknown, {}, {}>>, Document<unknown, any, unknown> & unknown extends {_id?: infer U} ? IfAny<U, {_id: Types.ObjectId}, Required<{_id: U}>> : {_id: Types.ObjectId} & {}, {}, unknown> & {}}
  */
-function findAll(limit = 20, offset = 0) {
-  return Todo.find().limit(limit).skip(offset);
+function findAll(username) {
+  return Todo.find({user:username});
 }
 
 async function findOne(id) {
