@@ -1,19 +1,24 @@
 version: "3"
 
 services:
+  #define the mongodb service
   mongodb:
     image: mongo:latest
     hostname: mongodb
     container_name: mongodb
     restart: unless-stopped
+    #Use the shared network
     networks:
       - net
+    # Bind the data folder to the data folder in the container
     volumes:
       - ./data:/data/db
+  #define the backend service
   backend:
     image: back
     container_name: backend
     restart: unless-stopped
+    #Use the shared network
     networks:
       - net
     build: 
@@ -26,27 +31,35 @@ services:
     #   - PORT=5000
     #   #This should be randomly generated string that signs your JWT tokens and should be secret and unique, change it and note that changing it will invalidate all existing tokens
     #   - JWT_SECRET=fcFrFtNPLaLAyia4agE3SHuktDISoIKRCAmGMKX33t0fRnASoN8TvZX4u9vojFvFzKDQoiJfDT8BUR0f      
+    # Bind the .env file from the backend folder to the .env file in the container
     volumes:
-      - ./backend:/app
+      - type: bind
+        source: ./backend/.env
+        target: /app/.env
+    #Maps the port 5000 of the container to the port 5000 of the host
     ports:
       - "5000:5000"
+  #define the frontend service
   frontend:
     image: front
     container_name: frontend
     restart: unless-stopped
+    #Use the shared network
     networks:
       - net
+    #To build the image from the Dockerfile in the frontend folder
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    #Force the frontend to wait for the backend to be ready
     depends_on:
       - backend
     volumes:
       - ./frontend:/app
+    #Maps the port 3000 of the container to the port 3000 of the host
     ports:
       - "3000:3000"
-
+#Define the shared network for the services
 networks:
   net:
     driver: bridge
-
