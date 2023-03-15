@@ -6,7 +6,8 @@
 
 1. Clone the repository from [github](https://github.com/Pierre-Brieuc/projet_final_COLLET-MARIE_ANGELIQUE)
 
-2. If you don't have them installed already, install docker with the compose plugin from Docker
+2. If you don't have them installed already, install docker and the compose plugin from [Docker](https://docs.docker.com/)
+
 3. Then run these commands : 
 ```bash
 cd projet_final_COLLET-MARIE_ANGELIQUE
