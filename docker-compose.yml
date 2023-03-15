@@ -12,10 +12,11 @@ services:
       - net
     # Bind the data folder to the data folder in the container
     volumes:
-      - ./data:/data/db
+      #- ./data:/data/db
+      - mongodb_data:/data/db
   #define the backend service
   backend:
-    image: back
+    image: pierrebrieuc/backend-final-project:latest
     container_name: backend
     restart: unless-stopped
     #Use the shared network
@@ -41,7 +42,7 @@ services:
       - "5000:5000"
   #define the frontend service
   frontend:
-    image: front
+    image: pierrebrieuc/frontend-final-project:latest
     container_name: frontend
     restart: unless-stopped
     #Use the shared network
@@ -63,3 +64,6 @@ services:
 networks:
   net:
     driver: bridge
+
+volumes:
+  mongodb_data:
